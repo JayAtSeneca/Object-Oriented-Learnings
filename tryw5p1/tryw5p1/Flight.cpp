@@ -24,6 +24,16 @@ namespace sdds {
         strcpy(m_title, "EmptyPlane");
     }
 
+    bool Flight::isIdentical(const Flight& operand)
+    {
+        bool done = false;
+        if (m_fuel == operand.m_fuel && m_passengers == operand.m_passengers && m_title == operand.m_title)
+        {
+            done = true;
+        }
+        return done;
+    }
+
     // New Flight
     Flight::Flight() {
         emptyPlane();
@@ -81,80 +91,196 @@ namespace sdds {
         return cout;
     }
 
+    int Flight::getPassengers()
+    {
+        return m_passengers;
+    }
+
     Flight::operator bool() const
     {
+        bool done = false;
+        if ((m_passengers > 0) && (m_fuel >= m_passengers * fuelPerPerson ))
+        {
+            done = true;
+        }
+        return done;
     }
 
     Flight::operator int() const
     {
+        return m_passengers;
     }
 
     Flight::operator double() const
     {
+        return m_fuel;
     }
 
     Flight::operator const char* () const
     {
+        return m_title;
     }
 
     bool Flight::operator~() const
     {
-        return false;
+        bool done = false;
+        if (m_passengers == 0)
+        {
+            done = true;
+        }
+        return done;
     }
 
-    Flight& Flight::operator=(const Flight& value)
+    Flight& Flight::operator=(Flight& rO)
     {
-        // TODO: insert return statement here
+        m_passengers = rO.m_passengers;
+        m_fuel = rO.m_fuel;
+        strcpy(m_title, rO.m_title);
+        rO.m_fuel = 0;
+        rO.m_passengers = 0;
+        strcpy(rO.m_title, "EmptyPlane");
+        return *this;
     }
 
     Flight& Flight::operator=(int value)
     {
-        // TODO: insert return statement here
+        if (value <= Boen747Capacity && value > 0)
+        {
+            m_passengers = value;
+        }
+        return *this;
     }
 
     Flight& Flight::operator=(double value)
     {
-        // TODO: insert return statement here
+        if (value > 0 && value <= FuelTankCapacity)
+        {
+            m_fuel = value;
+        }
+        return *this;
     }
 
     Flight& Flight::operator+=(double value)
     {
-        // TODO: insert return statement here
+        double m_val = m_fuel;
+        m_val += value;
+        if (value > 0 && m_fuel != FuelTankCapacity)
+        {
+            if (m_val >= FuelTankCapacity)
+            {
+                m_fuel = FuelTankCapacity;
+            }
+            else
+            {
+                m_fuel = m_val;
+            }
+        }
+        
+        return *this;
     }
 
     Flight& Flight::operator+=(int value)
     {
-        // TODO: insert return statement here
+        int m_val = m_passengers;
+        m_val += value;
+        if (value > 0 && m_passengers != Boen747Capacity)
+        {
+            if (m_val >= Boen747Capacity)
+            {
+                m_passengers = Boen747Capacity;
+            }
+            else
+            {
+                m_passengers = m_val;
+            }
+        }
+        
+        return *this;
     }
 
     Flight& Flight::operator-=(int value)
     {
-        // TODO: insert return statement here
+        int m_val = m_passengers;
+        m_val -= value;
+        if (value > 0 && value <= m_passengers)
+        {
+            if (m_val > 0)
+            {
+                m_passengers = m_val;
+            }
+        }
+        return *this;
     }
 
     Flight& Flight::operator-=(double value)
     {
-        // TODO: insert return statement here
+        double m_val = m_fuel;
+        m_val -= value;
+        if (value > 0)
+        {
+            if (m_val < 0)
+            {
+                m_fuel = 0;
+            }
+            else
+            {
+                m_fuel = m_val;
+            }
+        }
+        return *this;
     }
 
-    Flight& Flight::operator<<(const Flight& value)
+    Flight& Flight::operator<<(Flight& rO)
     {
-        // TODO: insert return statement here
+        int tempPassengers = m_passengers + rO.m_passengers;
+        if (!isIdentical(rO))
+        {
+            if (tempPassengers >= Boen747Capacity)
+            {
+                m_passengers = Boen747Capacity;
+                rO.m_passengers = rO.m_passengers - Boen747Capacity;
+            }
+            else
+            {
+                m_passengers = tempPassengers;
+                rO.m_passengers = rO.m_passengers - tempPassengers;
+            }
+        }
+        
+        return *this;
     }
 
-    Flight& Flight::operator>>(const Flight& value)
+    Flight& Flight::operator>>(Flight& rO)
     {
-        // TODO: insert return statement here
+        int tempPassengers = m_passengers + rO.m_passengers;
+        if (!isIdentical(rO))
+        {
+            if (tempPassengers >= Boen747Capacity)
+            {
+                rO.m_passengers = Boen747Capacity;
+                m_passengers = tempPassengers - Boen747Capacity;
+            }
+            else
+            {
+                rO.m_passengers = tempPassengers;
+                m_passengers = m_passengers - tempPassengers;
+            }
+        }
+        return *this;
     }
 
-    Flight operator+(const Flight& left, const Flight& right)
+    int operator+(const Flight& left, const Flight& right)
     {
-        return Flight();
+        int leftValue = (int)left;
+        int rightValue = (int)right;
+        int value = leftValue + rightValue;
+        return value;
     }
 
-    Flight operator+=(int& left, const Flight& right)
+    int operator+=(int& left, const Flight& right)
     {
-        return Flight();
+        left = left + (int)right;
+        return left;
     }
 
 }

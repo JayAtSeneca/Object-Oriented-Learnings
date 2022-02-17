@@ -7,6 +7,7 @@ namespace sdds {
 
     const int Boen747Capacity = 388;
     const int FuelTankCapacity = 238840;
+	const double fuelPerPerson = 600;
 
     class Flight {
 
@@ -14,11 +15,13 @@ namespace sdds {
         double m_fuel = 0;
         char m_title[16];
         void emptyPlane();
+		bool isIdentical(const Flight& operand);
 
     public:
         Flight();
         Flight(int passengers, double fuel, const char* title);
         std::ostream& display()const;
+		int getPassengers();
          //type conversion operators
 		operator bool()const;
 		operator int() const;
@@ -27,20 +30,20 @@ namespace sdds {
 		// unary member operator
 		bool operator~()const;
 		//Binary member operator
-		Flight& operator=(const Flight& value);
+		Flight& operator=(Flight& rO);
 		Flight& operator=(int value);
 		Flight& operator=(double value);
 		Flight& operator+=(double value);
 		Flight& operator+=(int value);
 		Flight& operator-=(int value);
 		Flight& operator-=(double value);
-		Flight& operator<<(const Flight& value);
-		Flight& operator>>(const Flight& value);
+		Flight& operator<<(Flight& rO);
+		Flight& operator>>(Flight& rO);
 
     };
 	// binary helper operaters
-	Flight operator+(const Flight& left, const Flight& right);
-	Flight operator+=(int& left, const Flight& right);
+	int operator+(const Flight& left, const Flight& right);
+	int operator+=(int& left, const Flight& right);
 }
 #endif // SDDS_FLIGHT_H
 
