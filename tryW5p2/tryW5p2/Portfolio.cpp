@@ -68,7 +68,96 @@ namespace sdds {
         return cout;
     }
 
+    Portfolio::operator double() const
+    {
+        return m_value;
+    }
+
+    Portfolio::operator const char* () const
+    {
+        return m_stock;
+    }
+
+    Portfolio::operator char() const
+    {
+        return m_type;
+    }
+
+    Portfolio::operator bool() const
+    {
+        bool done = false;
+        if (m_type == 'G' || m_type == 'V' || m_type == 'I')
+        {
+            done = true;
+        }
+        return done;
+    }
+
+    Portfolio& Portfolio::operator+=(double value)
+    {
+        if (value >= 0 && this->m_value != 0)
+        {
+            m_value += value;
+        }
+        return *this;
+    }
+    bool Portfolio::operator!=(const Portfolio& rightOperand)
+    {
+        bool done = false;
+        if ((m_value != rightOperand.m_value) && (m_stock != rightOperand.m_stock))
+        {
+            done = true;
+        }
+        return done;
+    }
+    Portfolio& Portfolio::operator-=(double value)
+    {
+        if (value >= 0 && this->m_value != 0)
+        {
+            m_value -= value;
+        }
+        return *this;
+    }
+
+    Portfolio& Portfolio::operator<<(Portfolio& rightOperand)
+    {
+        
+        if (*this != rightOperand)
+        {
+            m_value += rightOperand.m_value;
+            rightOperand.emptyPortfolio();
+        }
+        return *this;
+    }
+    Portfolio& Portfolio::operator>>(Portfolio& rightOperand)
+    {
+        if (*this != rightOperand)
+        {
+            rightOperand.m_value += m_value;
+            emptyPortfolio();
+        }
+        return *this;
+    }
+
+    bool Portfolio::operator~() const
+    {
+        return m_value < 0 ? true : false;
+    }
 
 
+
+
+    double operator+(const Portfolio& left, const Portfolio& right)
+    {
+        double value = 0;
+        value = (double)left + (double)right;
+        return value;
+    }
+
+    double operator+=(double& value, const Portfolio& right)
+    {
+        value += (double)right;
+        return value;
+    }
 
 }

@@ -22,14 +22,25 @@ namespace sdds {
         double m_value = 0;
         char m_stock[16];
         char m_type;
-        void emptyPortfolio();
+        
     public:
         Portfolio();
         Portfolio(double value, const char* stock, char type);
         void dispPortfolio() const;
+        void emptyPortfolio();
         std::ostream& display() const;
-        
-
+        operator double()const;
+        operator const char* ()const;
+        operator char()const;
+        operator bool()const;
+        bool operator~()const;
+        bool operator!=(const Portfolio& rightOperand);
+        Portfolio& operator+=(double value);
+        Portfolio& operator-=(double value);
+        Portfolio& operator<<(Portfolio& rightOperand);
+        Portfolio& operator>>(Portfolio& rightOperand);
     };
+    double operator+(const Portfolio& left, const Portfolio& right);
+    double operator+=(double& value, const Portfolio& right);
 }
 #endif // SDDS_Portfolio_H_
