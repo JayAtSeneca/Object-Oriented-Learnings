@@ -7,7 +7,7 @@ namespace sdds {
 	bool HealthCard::validID(const char* name, long long number, const char vCode[], const char sNumber[]) const
 	{
 		bool done = false;
-		if ((name != nullptr && strlen(name) != 0) && (number > 999999999 && number < 9999999999) && (strlen(vCode) == 2) && (strlen(sNumber) == 9))
+		if ((name != nullptr && name[0] != '\0') && (number > 999999999 && number < 9999999999) && (strlen(vCode) == 2) && (strlen(sNumber) == 9))
 		{
 			done = true;
 		}
@@ -57,25 +57,10 @@ namespace sdds {
 			setEmpty();
 		}
 	}
-	/*bool HealthCard::isValid(const HealthCard& hc) const
-	{
-		bool done = false;
-		if ((hc.m_name != nullptr && strlen(hc.m_name) != 0) && (hc.m_number > 999999999 && hc.m_number < 9999999999) && (strlen(hc.m_vCode) == 2) && (strlen(hc.m_sNumber) == 9))
-		{
-			done = true;
-		}
-		return done;
-	}*/
+	
 
 	HealthCard::HealthCard(const char* name, long long number, const char vCode[], const char sNumber[])
 	{
-		/*if (validID(name, number, vCode, sNumber))
-		{
-			allocateAndCopy(name);
-			m_number = number;
-			strcpy(m_vCode, vCode);
-			strcpy(m_sNumber, sNumber);
-		}*/
 		set(name, number, vCode, sNumber);
 	}
 
@@ -83,10 +68,11 @@ namespace sdds {
 	{
 		if (hc)
 		{
-			set(hc.m_name, hc.m_number, hc.m_vCode, hc.m_sNumber);
+			/*set(hc.m_name, hc.m_number, hc.m_vCode, hc.m_sNumber);*/
+			*this = hc;
 		}
 	}
-	HealthCard& HealthCard::operator==(const HealthCard& hc)
+	HealthCard& HealthCard::operator=(const HealthCard& hc)
 	{
 		if (this != &hc)
 		{
@@ -109,7 +95,7 @@ namespace sdds {
 			if (toFile == true)
 			{
 				ostr << m_name;
-				printIDInfo(ostr);
+				printIDInfo(ostr)<<endl;
 			}
 			else
 			{

@@ -31,5 +31,8 @@
     <None Include="HealthCardInfo.csv">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="goodInfo.csv">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

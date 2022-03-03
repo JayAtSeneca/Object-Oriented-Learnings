@@ -17,7 +17,7 @@ namespace sdds {
    public:
        HealthCard(const char* name = nullptr, long long number = 0, const char vCode[] = {}, const char sNumber[] = {});
        HealthCard(const HealthCard& hc);
-       HealthCard& operator==(const HealthCard& hc);
+       HealthCard& operator=(const HealthCard& hc);
        ~HealthCard();
      //  bool isValid(const HealthCard& hc)const;
        operator bool()const;

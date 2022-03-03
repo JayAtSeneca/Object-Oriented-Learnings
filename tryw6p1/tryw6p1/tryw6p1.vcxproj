@@ -146,6 +146,7 @@
     <ClInclude Include="HealthCard.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="goodInfo.csv" />
     <None Include="HealthCardInfo.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
