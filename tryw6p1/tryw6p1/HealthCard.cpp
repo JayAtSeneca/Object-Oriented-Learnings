@@ -94,7 +94,7 @@ namespace sdds {
 		{
 			if (toFile == true)
 			{
-				ostr << m_name;
+				ostr << m_name << ",";
 				printIDInfo(ostr)<<endl;
 			}
 			else
