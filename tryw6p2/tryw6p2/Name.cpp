@@ -168,7 +168,7 @@ namespace sdds
 			if (istr.peek() == ' ')
 			{
 				istr.ignore();
-				if (m_middleName != nullptr || m_middleName != "" || m_middleName[0] != ' ')
+				if (m_middleName != nullptr || m_middleName == NULL || m_middleName[0] != ' ')
 				{
 					delete[] m_middleName;
 					m_middleName = nullptr;
@@ -222,7 +222,7 @@ namespace sdds
 
 	Name& sdds::Name::operator+=(const char* str)
 	{
-		if (str != nullptr && str != "" && str[0] != ' ')
+		if (str != nullptr && str[0] != ' ')
 		{
 			if (m_firstName == nullptr || m_middleName == nullptr || m_lastName == nullptr)
 			{
@@ -285,12 +285,12 @@ namespace sdds
 		return done;
 	}
 
-	istream& sdds::operator>>(istream& istr, Name& n)
+	istream& operator>>(istream& istr, Name& n)
 	{
 		return n.read(istr);
 	}
 
-	ostream& sdds::operator<<(ostream& ostr, const Name& n)
+	ostream& operator<<(ostream& ostr, const Name& n)
 	{
 		if (n)
 		{
