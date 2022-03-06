@@ -9,6 +9,9 @@ namespace sdds
 		char* m_middleName{};
 		char* m_lastName{};
 		void safeEmpty();
+		Name& setFirstName(const char* str);
+		Name& setMiddleName(const char* str);
+		Name& setLastName(const char* str);
 	public:
 		Name();
 		Name(const char* firstName);
@@ -18,10 +21,13 @@ namespace sdds
 		Name& operator=(const Name& n);
 		~Name();
 		Name& setShort(bool arg);
-		Name& operator+=(const Name& n);
+		std::istream& read(std::istream& istr);
+		std::ostream& print(std::ostream& ostr)const;
+		Name& operator+=(const char* str);
 		operator bool()const;
+		void extractChar(std::istream& istr, char ch) const;
 	};
-	std::istream& operator>>(std::istream& istr, const Name& n);
+	std::istream& operator>>(std::istream& istr, Name& n);
 	std::ostream& operator<<(std::ostream& ostr, const Name& n);
 }
 #endif // !SDDS_NAME_H
