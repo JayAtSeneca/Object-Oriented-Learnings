@@ -163,7 +163,8 @@ namespace sdds
 		char localLastName[30] = { "\0" };
 		
 		istr >> localFirstName;
-		if (localFirstName != "") {
+		//istr.getline(localFirstName, 30, '\n');
+		if (isalpha(localFirstName[0])) {
 			if (istr.peek() == ' ')
 			{
 				istr.ignore();
