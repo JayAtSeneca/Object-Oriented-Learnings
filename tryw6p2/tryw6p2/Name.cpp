@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "Name.h"
 
 using namespace std;
@@ -20,6 +21,8 @@ namespace sdds
 	{
 		if (str && str[0])
 		{
+			delete[] m_firstName;
+			m_firstName = nullptr;
 			char* temp = new char[strlen(str) + 1];
 			strcpy(temp, str);
 			m_firstName = temp;
@@ -31,6 +34,8 @@ namespace sdds
 	{
 		if (str && str[0])
 		{
+			delete[] m_middleName;
+			m_middleName = nullptr;
 			char* temp = new char[strlen(str) + 1];
 			strcpy(temp, str);
 			m_middleName = temp;
@@ -42,6 +47,8 @@ namespace sdds
 	{
 		if (str && str[0])
 		{
+			delete[] m_lastName;
+			m_lastName = nullptr;
 			char* temp = new char[strlen(str) + 1];
 			strcpy(temp, str);
 			m_lastName = temp;
@@ -56,7 +63,7 @@ namespace sdds
 
 	sdds::Name::Name(const char* firstName)
 	{
-		if (firstName == nullptr) // || strcmp(firstName, " ") || firstName[0] == '\0'
+		if (firstName == nullptr)
 		{
 			safeEmpty();
 		}
@@ -64,12 +71,11 @@ namespace sdds
 		{
 			setFirstName(firstName);
 		}
-		//cout << m_firstName<<endl;
 	}
 
 	sdds::Name::Name(const char* firstName, const char* lastName)
 	{
-		if (firstName == nullptr || lastName == nullptr) //|| strcmp(firstName, " ") || firstName[0] == '\0' || strcmp(lastName, " ") || lastName[0] == '\0'
+		if (firstName == nullptr || lastName == nullptr)
 		{
 			safeEmpty();
 		}
@@ -78,13 +84,11 @@ namespace sdds
 			setFirstName(firstName);
 			setLastName(lastName);
 		}
-		//cout << m_firstName << endl << m_lastName << endl;
 	}
 
 	sdds::Name::Name(const char* firstName, const char* middleName, const char* lastName)
 	{
 		if (firstName == nullptr || lastName == nullptr || middleName == nullptr)
-			//|| strcmp(firstName, " ") || firstName[0] == '\0' || strcmp(lastName, " ") || lastName[0] == '\0' || strcmp(middleName, " ") || middleName[0] == '\0'
 		{
 			safeEmpty();
 		}
@@ -94,7 +98,6 @@ namespace sdds
 			setLastName(lastName);
 			setMiddleName(middleName);
 		}
-		//cout << m_firstName << endl << m_lastName << endl << m_middleName << endl;
 	}
 
 	sdds::Name::Name(const Name& n)
@@ -118,9 +121,7 @@ namespace sdds
 
 	sdds::Name::~Name()
 	{
-		delete[] m_firstName;
-		delete[] m_middleName;
-		delete[] m_lastName;
+		safeEmpty();
 	}
 
 	Name& sdds::Name::setShort(bool arg)
@@ -132,28 +133,10 @@ namespace sdds
 			temp[1] = '\0';
 			strcat(temp, ".");
 			delete[] m_middleName;
+			m_middleName = nullptr;
 			m_middleName = temp;
 		}
-		/*else
-		{
-			delete[] m_middleName;
-			m_middleName = nullptr;
-		}*/
 		return *this;
-	}
-
-	void Name::extractChar(istream& istr, char ch) const
-	{
-
-		if (istr.peek() == ch)
-		{
-			istr.ignore();
-		}
-		else
-		{
-			istr.ignore(1000, ch);
-			istr.setstate(ios::failbit);
-		}
 	}
 
 	istream& Name::read(istream& istr)
@@ -161,9 +144,9 @@ namespace sdds
 		char localFirstName[30] = { "\0" };
 		char localMiddlename[30] = { "\0" };
 		char localLastName[30] = { "\0" };
-		
+		safeEmpty();
 		istr >> localFirstName;
-		//istr.getline(localFirstName, 30, '\n');
+
 		if (isalpha(localFirstName[0])) {
 			if (istr.peek() == ' ')
 			{
@@ -176,8 +159,6 @@ namespace sdds
 				istr >> localLastName;
 				if (istr.peek() != '\n' && istr.peek() == ' ')
 				{
-					/*setShort(false);*/
-
 					strcpy(localMiddlename, localLastName);
 					localLastName[0] = '\0';
 					istr.ignore();
@@ -208,68 +189,51 @@ namespace sdds
 
 	ostream& Name::print(ostream& ostr)const
 	{
-		cout << m_firstName;
-		if (m_middleName != nullptr)
+		if (m_firstName && m_firstName[0])
 		{
-			cout << " " << m_middleName;
+			ostr << m_firstName;
 		}
-		if (m_lastName != nullptr)
+
+		if (m_middleName && m_middleName[0])
 		{
-			cout << " " << m_lastName;
+			ostr << " " << m_middleName;
+		}
+		if (m_lastName && m_lastName[0])
+		{
+			ostr << " " << m_lastName;
 		}
 		return ostr;
 	}
 
 	Name& sdds::Name::operator+=(const char* str)
 	{
-		if (str != nullptr && str[0] != ' ')
+		if (str != nullptr && str[0] != '\0')
 		{
-			if (m_firstName == nullptr || m_middleName == nullptr || m_lastName == nullptr)
+			bool space = false;
+			for (int i = 0; str[i] != 0 && !space; i++)
 			{
+				space = str[i] == ' ';
+			}
+
+			if (!space)
+			{
+
 				if (m_firstName == nullptr)
 				{
-					/*if (strcmp(str, " "))
-					{
-						safeEmpty();
-					}*/
-
-
-					char* temp = new char[strlen(str) + 1];
-					strcpy(temp, str);
-					m_firstName = temp;
-
+					setFirstName(str);
 				}
 				else if (m_middleName == nullptr)
 				{
-					/*if (strcmp(str, " "))
-					{
-						safeEmpty();
-					}*/
-
-
-					char* temp = new char[strlen(str) + 1];
-					strcpy(temp, str);
-					m_middleName = temp;
-
+					setMiddleName(str);
 				}
 				else if (m_lastName == nullptr)
 				{
-					/*if (strcmp(str, " "))
-					{
-						safeEmpty();
-					}*/
-
-
-					char* temp = new char[strlen(str) + 1];
-					strcpy(temp, str);
-					m_lastName = temp;
-
+					setLastName(str);
 				}
-
-			}
-			else
-			{
-				safeEmpty();
+				else
+				{
+					safeEmpty();
+				}
 			}
 		}
 		return *this;
@@ -278,7 +242,7 @@ namespace sdds
 	sdds::Name::operator bool() const
 	{
 		bool done = true;
-		if (m_firstName == nullptr) //|| strcmp(m_firstName, " ")
+		if (m_firstName == nullptr)
 		{
 			done = false;
 		}
@@ -303,4 +267,3 @@ namespace sdds
 		return ostr;
 	}
 }
-
