@@ -14,7 +14,7 @@ namespace sdds
 		virtual operator bool()const = 0;
 		virtual int qtyNeeded()const = 0;
 		virtual int qty()const = 0;
-		virtual void Linear(bool isLinear) = 0;
+		virtual void linear(bool isLinear) = 0;
 		virtual std::ofstream& save(std::ofstream& ofstr)const = 0;
 		virtual std::ifstream& load(std::ifstream& ifstr) = 0;
 		virtual std::ostream& display(std::ostream& ostr)const = 0;
