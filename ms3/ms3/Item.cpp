@@ -86,7 +86,9 @@ namespace sdds
 		bool done = false;
 		if (description != NULL)
 		{
-			if (strncmp(m_description, description,strlen(description)) >= 0)
+			char* ptr;
+			ptr = strstr(m_description, description);
+			if (ptr)
 			{
 				done = true;
 			}
