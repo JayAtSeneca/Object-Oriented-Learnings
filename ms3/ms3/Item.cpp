@@ -86,7 +86,7 @@ namespace sdds
 		bool done = false;
 		if (description != NULL)
 		{
-			if (strncmp(description, m_description, strlen(description) >= 0))
+			if (strncmp(m_description, description,strlen(description)) >= 0)
 			{
 				done = true;
 			}
@@ -108,16 +108,17 @@ namespace sdds
 	}
 	std::ifstream& Item::load(std::ifstream& ifstr)
 	{
-		delete[] m_description;
+		/*delete[] m_description;*/
 		int tempSKU;
-		char tempDescription[100];
+		char tempDescription[500];
 		int tempQuantityInHand;
 		int tempQuantityReq;
 		double tempPrice;
 		ifstr >> tempSKU;
 		ifstr.ignore();
-		ifstr >> tempDescription;
-		ifstr.ignore();
+		/*ifstr >> tempDescription;*/
+		ifstr.getline(tempDescription, 500, '\t');
+		//ifstr.ignore();
 		ifstr >> tempQuantityInHand;
 		ifstr.ignore();
 		ifstr >> tempQuantityReq;
@@ -133,6 +134,7 @@ namespace sdds
 		{
 			state = "Input file stream read failed!";
 		}
+		tempDescription[0] = '\0';
 		return ifstr;
 	}
 	std::ostream& Item::display(std::ostream& ostr) const
@@ -174,6 +176,7 @@ namespace sdds
 				ostr.precision(2);
 				ostr << right << m_price;
 				ostr.unsetf(ios::fixed);
+				ostr << " |";
 			}
 			else
 			{
@@ -205,7 +208,19 @@ namespace sdds
 		cout << "Description: ";
 		istr.ignore(1000, '\n');
 		istr.getline(tempDescription,100);
-		cout << "Quantity Needed: ";
+		
+		tempQuantityReq = ut.getint(1, 9999, "Quantity Needed: ");
+		tempQuantityInHand = ut.getint(0, tempQuantityReq, "Quantity On Hand: ");
+		tempPrice = ut.getdouble(0.0, 9999.0, "Unit Price: $");
+		ut.alocpy(m_description, tempDescription);
+		m_quantityReq = tempQuantityReq;
+		m_quantityInHand = tempQuantityInHand;
+		m_price = tempPrice;
+		if (istr.fail())
+		{
+			state = "Console entry failed!";
+		}
+		return istr;
 	}
 	int Item::readSku(std::istream& istr)
 	{

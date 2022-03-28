@@ -33,6 +33,8 @@ namespace sdds {
       void alocpy(char*& destination, const char* source);
       int getint(const char* prompt = nullptr);
       int getint(int min, int max, const char* prompt = nullptr, const char* errMes = nullptr);
+      double getdouble(const char* prompt = nullptr);
+      double getdouble(double min, double max, const char* prompt = nullptr, const char* errMes = nullptr);
    };
    extern Utils ut;
 }
