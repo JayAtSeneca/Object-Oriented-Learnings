@@ -148,7 +148,7 @@ namespace sdds {
                }
                else
                {
-                   cout << "Value out of range [" << min << "<=val<=" << max << "]: ";
+                   cout << "Value out of range [" << min << ".00" << "<=val<=" << max << ".00" << "]: ";
                }
            }
            else

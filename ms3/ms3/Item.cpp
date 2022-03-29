@@ -104,7 +104,8 @@ namespace sdds
 			ofstr << m_quantityInHand << "\t";
 			ofstr.setf(ios::fixed);
 			ofstr.precision(2);
-			ofstr << m_price << "\t";
+			ofstr << m_price;
+			ofstr.unsetf(ios::fixed);
 		}
 		return ofstr;
 	}
@@ -126,7 +127,7 @@ namespace sdds
 		ifstr >> tempQuantityReq;
 		ifstr.ignore();
 		ifstr >> tempPrice;
-		ifstr.ignore();
+		//ifstr.ignore();
 		SKU = tempSKU;
 		ut.alocpy(m_description, tempDescription);
 		m_quantityInHand = tempQuantityInHand;
@@ -155,7 +156,10 @@ namespace sdds
 				ostr << " | ";
 				ostr.unsetf(ios::fixed);
 				bool done = false;
-				for (int i = 0; i < 35 && done != true; i++)
+				ostr.setf(ios::fixed);
+				/*ostr.width(35);*/
+				int i = 0;
+				for (i = 0; i < 35 && done != true; i++)
 				{
 					if (m_description[i] != '\0')
 					{
@@ -166,6 +170,13 @@ namespace sdds
 						done = true;
 					}
 				}
+				if (i < 35)
+				{
+					int tempLength = 35 - strlen(m_description);
+					ostr.width(tempLength);
+					ostr.fill(' ');
+				}
+				ostr.unsetf(ios::fixed);
 				ostr << " | ";
 				ostr.setf(ios::fixed);
 				ostr.width(4);
