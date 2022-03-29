@@ -102,6 +102,7 @@ namespace sdds
 			ofstr << SKU << "\t";
 			ofstr << m_description << "\t";
 			ofstr << m_quantityInHand << "\t";
+			ofstr << m_quantityReq << "\t";
 			ofstr.setf(ios::fixed);
 			ofstr.precision(2);
 			ofstr << m_price;
@@ -157,7 +158,6 @@ namespace sdds
 				ostr.unsetf(ios::fixed);
 				bool done = false;
 				ostr.setf(ios::fixed);
-				/*ostr.width(35);*/
 				int i = 0;
 				for (i = 0; i < 35 && done != true; i++)
 				{
