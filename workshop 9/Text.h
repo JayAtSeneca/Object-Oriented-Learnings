@@ -1,3 +1,4 @@
+<<<<<<< HEAD:workshop 9/Text.h
 //Name: Jay Pravinkumar Chaudhari
 //Student ID: 147268205
 //E-mail: jpchaudhari@myseneca.ca
@@ -29,3 +30,5 @@ namespace sdds
 	std::istream& operator>>(std::istream& istr, Text& t);
 }
 #endif // !SDDS_TEXT_H
+=======
+>>>>>>> parent of 501ca07 (Text.cpp and Text.h Done!!):tryW9/tryW9/Text.h
