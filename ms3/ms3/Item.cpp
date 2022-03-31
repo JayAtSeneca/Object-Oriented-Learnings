@@ -151,13 +151,14 @@ namespace sdds
 		{
 			if (linear())
 			{
+
 				ostr.setf(ios::fixed);
-				ostr.width(4);
+				ostr.width(5);
 				ostr << SKU;
-				ostr << " | ";
 				ostr.unsetf(ios::fixed);
-				bool done = false;
+				ostr << " | ";
 				ostr.setf(ios::fixed);
+				bool done = false;
 				int i = 0;
 				for (i = 0; i < 35 && done != true; i++)
 				{
@@ -173,19 +174,25 @@ namespace sdds
 				if (i < 35)
 				{
 					int tempLength = 35 - strlen(m_description);
-					ostr.width(tempLength);
-					ostr.fill(' ');
+					for (int j = 0; j < tempLength; j++)
+					{
+						ostr << " ";
+					}
 				}
 				ostr.unsetf(ios::fixed);
 				ostr << " | ";
 				ostr.setf(ios::fixed);
 				ostr.width(4);
 				ostr << right << m_quantityInHand;
-				ostr << " | ";
-				ostr << right << m_quantityReq;
-				ostr << " | ";
 				ostr.unsetf(ios::fixed);
+				ostr << " | ";
 				ostr.setf(ios::fixed);
+				ostr.width(4);
+				ostr << right << m_quantityReq;
+				ostr.unsetf(ios::fixed);
+				ostr << " | ";
+				ostr.setf(ios::fixed);
+				ostr.width(7);
 				ostr.precision(2);
 				ostr << right << m_price;
 				ostr.unsetf(ios::fixed);
