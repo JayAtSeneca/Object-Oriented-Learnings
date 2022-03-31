@@ -1,3 +1,23 @@
+/*
+Name: Jay Pravinkumar Chaudhari
+Student ID: 147268205
+E-mail: jpchaudhari@myseneca.ca
+Section Code: NAA
+
+Citation and Sources...
+Final Project Milestone 2
+Module: Item
+Filename: Item.cpp
+Version 1.0
+Author	Jay Pravinkumar Chaudhari
+Revision History
+-----------------------------------------------------------
+Date      Reason
+2022/03/30  completed milestone 3
+-----------------------------------------------------------
+I have done all the coding by myself and only copied the code
+that my professor provided to complete my workshops and assignments.
+-----------------------------------------------------------*/
 #include <cstring>
 #include "Item.h"
 #include "Utils.h"
@@ -15,7 +35,7 @@ namespace sdds
 		m_price = 0.0;
 		m_quantityInHand = 0;
 		m_quantityReq = 0;
-		SKU = 0;
+		m_sku = 0;
 	}
 	Item::Item(const Item& i)
 	{
@@ -51,7 +71,7 @@ namespace sdds
 	}
 	Item::operator bool() const
 	{
-		return state;
+		return m_state;
 	}
 	int Item::operator-=(int quantityInHand)
 	{
@@ -69,13 +89,13 @@ namespace sdds
 	}
 	Item& Item::clear()
 	{
-		state.clear();
+		m_state.clear();
 		return *this;
 	}
 	bool Item::operator==(int sku) const
 	{
 		bool done = false;
-		if (sku == SKU)
+		if (sku == m_sku)
 		{
 			done = true;
 		}
@@ -97,9 +117,9 @@ namespace sdds
 	}
 	std::ofstream& Item::save(std::ofstream& ofstr) const
 	{
-		if (state)
+		if (m_state)
 		{
-			ofstr << SKU << "\t";
+			ofstr << m_sku << "\t";
 			ofstr << m_description << "\t";
 			ofstr << m_quantityInHand << "\t";
 			ofstr << m_quantityReq << "\t";
@@ -112,7 +132,6 @@ namespace sdds
 	}
 	std::ifstream& Item::load(std::ifstream& ifstr)
 	{
-		/*delete[] m_description;*/
 		int tempSKU;
 		char tempDescription[500];
 		int tempQuantityInHand;
@@ -120,41 +139,37 @@ namespace sdds
 		double tempPrice;
 		ifstr >> tempSKU;
 		ifstr.ignore();
-		/*ifstr >> tempDescription;*/
 		ifstr.getline(tempDescription, 500, '\t');
-		//ifstr.ignore();
 		ifstr >> tempQuantityInHand;
 		ifstr.ignore();
 		ifstr >> tempQuantityReq;
 		ifstr.ignore();
 		ifstr >> tempPrice;
-		//ifstr.ignore();
-		SKU = tempSKU;
+		m_sku = tempSKU;
 		ut.alocpy(m_description, tempDescription);
 		m_quantityInHand = tempQuantityInHand;
 		m_quantityReq = tempQuantityReq;
 		m_price = tempPrice;
 		if (ifstr.bad())
 		{
-			state = "Input file stream read failed!";
+			m_state = "Input file stream read failed!";
 		}
 		tempDescription[0] = '\0';
 		return ifstr;
 	}
 	std::ostream& Item::display(std::ostream& ostr) const
 	{
-		if (!state)
+		if (!m_state)
 		{
-			ostr << state;
+			ostr << m_state;
 		}
 		else
 		{
 			if (linear())
 			{
-
 				ostr.setf(ios::fixed);
 				ostr.width(5);
-				ostr << SKU;
+				ostr << m_sku;
 				ostr.unsetf(ios::fixed);
 				ostr << " | ";
 				ostr.setf(ios::fixed);
@@ -202,7 +217,7 @@ namespace sdds
 			{
 				int tempQty = m_quantityReq - m_quantityInHand;
 				ostr << "AMA Item:" << endl;
-				ostr << SKU << ": " << m_description << endl;
+				ostr << m_sku << ": " << m_description << endl;
 				ostr << "Quantity Needed: " << m_quantityReq << endl;
 				ostr << "Quantity Available: " << m_quantityInHand << endl;
 				ostr.setf(ios::fixed);
@@ -216,15 +231,14 @@ namespace sdds
 	}
 	std::istream& Item::read(std::istream& istr)
 	{
-		//DEV: TO DO 
 		delete[] m_description;
-		state.clear();
+		m_state.clear();
 		char tempDescription[100];
 		int tempQuantityReq;
 		int tempQuantityInHand;
 		double tempPrice;
 		cout << "AMA Item:" << endl;
-		SKU = ut.getint(40000, 99999, "SKU: ");
+		m_sku = ut.getint(40000, 99999, "SKU: ");
 		cout << "Description: ";
 		istr.ignore(1000, '\n');
 		istr.getline(tempDescription,100);
@@ -238,13 +252,13 @@ namespace sdds
 		m_price = tempPrice;
 		if (istr.fail())
 		{
-			state = "Console entry failed!";
+			m_state = "Console entry failed!";
 		}
 		return istr;
 	}
 	int Item::readSku(std::istream& istr)
 	{
-		SKU = ut.getint(40000, 99999, "SKU: ");
+		m_sku = ut.getint(40000, 99999, "SKU: ");
 		return 0;
 	}
 }

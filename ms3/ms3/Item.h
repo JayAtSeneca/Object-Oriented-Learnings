@@ -1,3 +1,23 @@
+/*
+Name: Jay Pravinkumar Chaudhari
+Student ID: 147268205
+E-mail: jpchaudhari@myseneca.ca
+Section Code: NAA
+
+Citation and Sources...
+Final Project Milestone 2
+Module: Item
+Filename: Item.h
+Version 1.0
+Author	Jay Pravinkumar Chaudhari
+Revision History
+-----------------------------------------------------------
+Date      Reason
+2022/03/30  completed milestone 3
+-----------------------------------------------------------
+I have done all the coding by myself and only copied the code
+that my professor provided to complete my workshops and assignments.
+-----------------------------------------------------------*/
 #ifndef SDDS_ITEM_H
 #define SDDS_ITEM_H
 #include <iostream>
@@ -14,8 +34,8 @@ namespace sdds
 		char* m_description;
 		bool m_flag;
 	protected:
-		Status state;
-		int SKU;
+		Status m_state;
+		int m_sku;
 		bool linear()const;
 	public:
 		Item();
