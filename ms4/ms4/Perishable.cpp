@@ -96,8 +96,9 @@ namespace sdds
 		{
 			if (Item::linear())
 			{
+				
 				Item::display(ostr);
-				if (m_instructions)
+				if (m_instructions && m_instructions[0] != '\0')
 				{
 					ostr << "*";
 				}
@@ -109,11 +110,12 @@ namespace sdds
 			}
 			else
 			{
+				
 				ostr << "Perishable ";
 				Item::display(ostr);
 				ostr << "Expiry date: ";
 				m_expiry.displayFormatted(ostr);
-				if (m_instructions)
+				if (m_instructions && m_instructions[0] != '\0')
 					ostr << "Handling Instructions: " << m_instructions;
 				ostr << endl;
 			}
