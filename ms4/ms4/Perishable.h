@@ -12,6 +12,7 @@ namespace sdds
 		Perishable();
 		Perishable(const Perishable& p);
 		Perishable& operator=(const Perishable& p);
+		operator bool()const;
 		~Perishable();
 		const Date& expiry()const;
 		virtual int readSku(std::istream& istr);

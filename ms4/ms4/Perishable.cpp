@@ -19,10 +19,21 @@ namespace sdds
 	{
 		if (this != &p)
 		{
+			Item::operator=(p);
 			ut.alocpy(m_instructions, p.m_instructions);
 			m_expiry = p.m_expiry;
 		}
 		return *this;
+	}
+	Perishable::operator bool() const
+	{
+		bool done = false;
+		int tempMonth = m_expiry.retMonth();
+		if (tempMonth != 4)
+		{
+			done = true;
+		}
+		return done;
 	}
 	Perishable::~Perishable()
 	{
@@ -32,7 +43,7 @@ namespace sdds
 	{
 		return m_expiry;
 	}
-	
+
 	int Perishable::readSku(std::istream& istr)
 	{
 		m_sku = ut.getint(10000, 39999, "SKU: ");
@@ -56,10 +67,8 @@ namespace sdds
 	{
 		Item::load(ifstr);
 		char tempInstructions[50] = { "\0" };
-		char tempExpiry[10] = { "\0" };
 		ifstr.ignore();
 		ifstr.getline(tempInstructions, 50, '\t');
-		ifstr.ignore();
 		ifstr >> m_expiry;
 		ifstr.ignore();
 		if (ifstr.fail())
@@ -75,6 +84,10 @@ namespace sdds
 	std::ostream& Perishable::display(std::ostream& ostr) const
 	{
 		//DEV: TO DO
+		/*int tempYear = 0, tempMonth = 0, tempDay = 0;
+		ut.getSystemDate(&tempYear, &tempMonth, &tempDay);*/
+
+
 		if (!Item::m_state)
 		{
 			ostr << m_state;
@@ -105,6 +118,7 @@ namespace sdds
 				ostr << endl;
 			}
 		}
+
 		return ostr;
 	}
 	std::istream& Perishable::read(std::istream& istr)
@@ -121,7 +135,7 @@ namespace sdds
 			istr.getline(tempInstructions, 1000, '\n');
 			ut.alocpy(m_instructions, tempInstructions);
 		}
-		
+
 		if (istr.fail())
 		{
 			Item::m_state = "Perishable console date entry failed!";

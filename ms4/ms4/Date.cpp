@@ -100,10 +100,10 @@ namespace sdds
 		ofstr << year;
 		ofstr.setf(ios::fixed);
 		ofstr.width(2);
-		ofstr.fill('0');
+		//ofstr.fill('0');
 		ofstr << right << m_month;
 		ofstr.width(2);
-		ofstr.fill('0');
+		//ofstr.fill('0');
 		ofstr << right << m_day;
 		ofstr.unsetf(ios::fixed);
 		return ofstr;
@@ -114,11 +114,11 @@ namespace sdds
 		ofstr.setf(ios::fixed);
 		ofstr << "/";
 		ofstr.width(2);
-		ofstr.fill('0');
+		//ofstr.fill('0');
 		ofstr << right << m_month;
 		ofstr << "/";
 		ofstr.width(2);
-		ofstr.fill('0');
+		//ofstr.fill('0');
 		ofstr << right << m_day;
 		ofstr.unsetf(ios::fixed);
 		return ofstr;
@@ -188,6 +188,19 @@ namespace sdds
 			done = true;
 		}
 		return done;
+	}
+	bool Date::isEqual(const Date& d)
+	{
+		bool done = false;
+		if (m_month == d.m_month)
+		{
+			done = true;
+		}
+		return done;
+	}
+	int Date::retMonth() const
+	{
+		return m_month;
 	}
 	const Status& Date::state()
 	{

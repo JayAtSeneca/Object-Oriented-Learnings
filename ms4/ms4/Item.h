@@ -31,7 +31,7 @@ namespace sdds
 		double m_price;
 		int m_quantityInHand;
 		int m_quantityReq;
-		char* m_description;
+		char* m_itemDescription;
 		bool m_flag;
 	protected:
 		Status m_state;

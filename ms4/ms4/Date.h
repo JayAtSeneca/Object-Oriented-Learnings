@@ -47,6 +47,8 @@ namespace sdds
 		bool operator>(const Date& d);
 		bool operator<=(const Date& d);
 		bool operator>=(const Date& d);
+		bool isEqual(const Date& d);
+		int retMonth()const;
 		const Status& state();
 		Date& formatted(bool val);
 		operator bool()const;

@@ -30,7 +30,7 @@ namespace sdds
 	}
 	Item::Item()
 	{
-		m_description = nullptr;
+		m_itemDescription = nullptr;
 		m_flag = false;
 		m_price = 0.0;
 		m_quantityInHand = 0;
@@ -45,17 +45,18 @@ namespace sdds
 	{
 		if (this != &i)
 		{
-			ut.alocpy(m_description, i.m_description);
+			ut.alocpy(m_itemDescription, i.m_itemDescription);
 			m_flag = i.m_flag;
 			m_price = i.m_price;
 			m_quantityInHand = i.m_quantityInHand;
 			m_quantityReq = i.m_quantityReq;
+			m_sku = i.m_sku;
 		}
 		return *this;
 	}
 	Item::~Item()
 	{
-		delete[] m_description;
+		delete[] m_itemDescription;
 	}
 	int Item::qtyNeeded() const
 	{
@@ -107,7 +108,7 @@ namespace sdds
 		if (description != NULL)
 		{
 			char* ptr;
-			ptr = strstr(m_description, description);
+			ptr = strstr(m_itemDescription, description);
 			if (ptr)
 			{
 				done = true;
@@ -120,7 +121,7 @@ namespace sdds
 		if (m_state)
 		{
 			ofstr << m_sku << "\t";
-			ofstr << m_description << "\t";
+			ofstr << m_itemDescription << "\t";
 			ofstr << m_quantityInHand << "\t";
 			ofstr << m_quantityReq << "\t";
 			ofstr.setf(ios::fixed);
@@ -146,7 +147,7 @@ namespace sdds
 		ifstr.ignore();
 		ifstr >> tempPrice;
 		m_sku = tempSKU;
-		ut.alocpy(m_description, tempDescription);
+		ut.alocpy(m_itemDescription, tempDescription);
 		m_quantityInHand = tempQuantityInHand;
 		m_quantityReq = tempQuantityReq;
 		m_price = tempPrice;
@@ -159,6 +160,7 @@ namespace sdds
 	}
 	std::ostream& Item::display(std::ostream& ostr) const
 	{
+
 		if (!m_state)
 		{
 			ostr << m_state;
@@ -177,9 +179,9 @@ namespace sdds
 				int i = 0;
 				for (i = 0; i < 35 && done != true; i++)
 				{
-					if (m_description[i] != '\0')
+					if (m_itemDescription[i] != '\0')
 					{
-						ostr << m_description[i];
+						ostr << m_itemDescription[i];
 					}
 					else
 					{
@@ -188,7 +190,7 @@ namespace sdds
 				}
 				if (i < 35)
 				{
-					int tempLength = 35 - strlen(m_description);
+					int tempLength = 35 - strlen(m_itemDescription);
 					for (int j = 0; j < tempLength; j++)
 					{
 						ostr << " ";
@@ -198,16 +200,19 @@ namespace sdds
 				ostr << " | ";
 				ostr.setf(ios::fixed);
 				ostr.width(4);
+				ostr.fill(' ');
 				ostr << right << m_quantityInHand;
 				ostr.unsetf(ios::fixed);
 				ostr << " | ";
 				ostr.setf(ios::fixed);
 				ostr.width(4);
+				ostr.fill(' ');
 				ostr << right << m_quantityReq;
 				ostr.unsetf(ios::fixed);
 				ostr << " | ";
 				ostr.setf(ios::fixed);
 				ostr.width(7);
+				ostr.fill(' ');
 				ostr.precision(2);
 				ostr << right << m_price;
 				ostr.unsetf(ios::fixed);
@@ -217,7 +222,7 @@ namespace sdds
 			{
 				int tempQty = m_quantityReq - m_quantityInHand;
 				ostr << "AMA Item:" << endl;
-				ostr << m_sku << ": " << m_description << endl;
+				ostr << m_sku << ": " << m_itemDescription << endl;
 				ostr << "Quantity Needed: " << m_quantityReq << endl;
 				ostr << "Quantity Available: " << m_quantityInHand << endl;
 				ostr.setf(ios::fixed);
@@ -227,6 +232,7 @@ namespace sdds
 				ostr.unsetf(ios::fixed);
 			}
 		}
+
 		return ostr;
 	}
 	std::istream& Item::read(std::istream& istr)
@@ -241,12 +247,12 @@ namespace sdds
 		m_sku = ut.getint(10000, 39999, "SKU: ");
 		cout << "Description: ";
 		istr.ignore(1000, '\n');
-		istr.getline(tempDescription,100);
-		
+		istr.getline(tempDescription, 100);
+
 		tempQuantityReq = ut.getint(1, 9999, "Quantity Needed: ");
 		tempQuantityInHand = ut.getint(0, tempQuantityReq, "Quantity On Hand: ");
 		tempPrice = ut.getdouble(0.0, 9999.0, "Unit Price: $");
-		ut.alocpy(m_description, tempDescription);
+		ut.alocpy(m_itemDescription, tempDescription);
 		m_quantityReq = tempQuantityReq;
 		m_quantityInHand = tempQuantityInHand;
 		m_price = tempPrice;
