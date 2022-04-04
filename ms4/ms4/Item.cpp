@@ -244,7 +244,8 @@ namespace sdds
 		int tempQuantityInHand;
 		double tempPrice;
 		cout << "AMA Item:" << endl;
-		m_sku = ut.getint(10000, 39999, "SKU: ");
+		/*m_sku = ut.getint(10000, 39999, "SKU: ");*/
+		m_sku = ut.getint(m_minSkuNum, m_maxSkuNum, "SKU: ");
 		cout << "Description: ";
 		istr.ignore(1000, '\n');
 		istr.getline(tempDescription, 100);
@@ -260,11 +261,16 @@ namespace sdds
 		{
 			m_state = "Console entry failed!";
 		}
+		m_minSkuNum = 40000;
+		m_maxSkuNum = 99999;
 		return istr;
 	}
 	int Item::readSku(std::istream& istr)
 	{
-		m_sku = ut.getint(40000, 99999, "SKU: ");
+		/*m_sku = ut.getint(40000, 99999, "SKU: ");*/
+		m_sku = ut.getint(m_minSkuNum, m_maxSkuNum, "SKU: ");
+		m_minSkuNum = 40000;
+		m_maxSkuNum = 99999;
 		return 0;
 	}
 }

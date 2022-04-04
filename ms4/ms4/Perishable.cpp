@@ -1,3 +1,23 @@
+/*
+Name: Jay Pravinkumar Chaudhari
+Student ID: 147268205
+E-mail: jpchaudhari@myseneca.ca
+Section Code: NAA
+
+Citation and Sources...
+Final Project Milestone 2
+Module: Perishable
+Filename: Perishable.cpp
+Version 2.0
+Author	Jay Pravinkumar Chaudhari
+Revision History
+-----------------------------------------------------------
+Date       Reason
+2022/04/01 To complete milestone 4
+-----------------------------------------------------------
+I have done all the coding by myself and only copied the code
+that my professor provided to complete my workshops and assignments.
+-----------------------------------------------------------*/
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
@@ -116,7 +136,7 @@ namespace sdds
 				ostr << "Expiry date: ";
 				m_expiry.displayFormatted(ostr);
 				if (m_instructions && m_instructions[0] != '\0')
-					ostr << "Handling Instructions: " << m_instructions;
+					ostr << endl <<"Handling Instructions: " << m_instructions;
 				ostr << endl;
 			}
 		}
@@ -126,6 +146,8 @@ namespace sdds
 	std::istream& Perishable::read(std::istream& istr)
 	{
 		//DEV: TO DO
+		Item::m_minSkuNum = 10000;
+		Item::m_maxSkuNum = 39999;
 		Item::read(istr);
 		cout << "Expiry date (YYMMDD): ";
 		m_expiry.read(istr);

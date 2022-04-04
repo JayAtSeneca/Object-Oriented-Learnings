@@ -37,6 +37,8 @@ namespace sdds
 		Status m_state;
 		int m_sku;
 		bool linear()const;
+		int m_minSkuNum = 40000;
+		int m_maxSkuNum = 99999;
 	public:
 		Item();
 		Item(const Item& i);
