@@ -19,6 +19,7 @@ I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
 -----------------------------------------------------------*/
 #include <iostream>
+#include <fstream>
 #include "Utils.h"
 #include "AidMan.h"
 
@@ -48,7 +49,7 @@ namespace sdds
 		return num;
 	}
 
-	AidMan::AidMan(unsigned int num, const char* str) :Menu(num, str)
+	AidMan::AidMan(unsigned int num, const char* str) :Menu(num, str), m_numIProdItems{ 0 },m_ptr{}
 	{
 		m_file = nullptr;
 	}
@@ -61,38 +62,221 @@ namespace sdds
 	void AidMan::run()
 	{
 		int num = 0;
+		char tempName[30] = { "\0" };
 		do
 		{
 			num = menu();
-			switch (num)
+			if (m_file == nullptr && num != 0)
 			{
-			case 0:
-				cout << "Exiting Program!" << endl;
-				break;
+				switch (num)
+				{
+				default:
+					cout << "\n****New/Open Aid Database****\n" << endl;
+					cout << "Enter file name: ";
+					char tempName[30] = { "\0" };
+					cin >> tempName;
+					if (load(tempName))
+					{
+						cout << m_numIProdItems + 1 << " records loaded!" << endl;
+					}
+					break;
+				}
+			}
+			else
+			{
+				switch (num)
+				{
+				case 0:
+					cout << "Exiting Program!" << endl;
+					break;
+				case 1:
+					cout << "\n****List Items****\n" << endl;
+					list();
+					break;
+				case 2:
+					cout << "\n****Add Item****\n" << endl;
+					break;
+				case 3:
+					cout << "\n****Remove Item****\n" << endl;
+					break;
+				case 4:
+					cout << "\n****Update Quantity****\n" << endl;
+					break;
+				case 5:
+					cout << "\n****Sort****\n" << endl;
+					break;
+				case 6:
+					cout << "\n****Ship Items****\n" << endl;
+					break;
+				case 7:
+					cout << "\n****New/Open Aid Database****\n" << endl;
+					cout << "Enter file name: ";
+					
+					cin >> tempName;
+					if (load(tempName))
+					{
+						cout << m_numIProdItems + 1 << " records loaded!" << endl;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		} while (num != 0);
+	}
+	int AidMan::list(const char* sub_desc)
+	{
+		int rowCounter = 0;
+		if (m_numIProdItems > 0) {
+			cout << " ROW |  SKU  | Description                         | Have | Need |  Price  | Expiry";
+			cout << "-----+-------+-------------------------------------+------+------+---------+-----------";
+			if (sub_desc == nullptr)
+			{
+
+				for (int i = 0; i < m_numIProdItems; i++)
+				{
+					cout << " ";
+					cout.setf(ios::right);
+					cout.width(3);
+					cout.fill(' ');
+					cout << i + 1;
+					cout.unsetf(ios::right);
+					m_ptr[i]->linear(true);
+					m_ptr[i]->display(cout);
+					rowCounter++;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < m_numIProdItems; i++)
+				{
+					if (m_ptr[i]->operator==(sub_desc))
+					{
+						cout << " ";
+						cout.setf(ios::right);
+						cout.width(3);
+						cout.fill(' ');
+						cout << i + 1;
+						cout.unsetf(ios::right);
+						m_ptr[i]->linear(true);
+						m_ptr[i]->display(cout);
+						rowCounter++;
+					}
+				}
+			}
+			cin.ignore();
+			cout << "Enter row number to display details or <ENTER> to continue:\n> ";
+						
+			if (cin.peek() != '\n') {
+				char temp[4] = "";
+				cin >> temp;
+				int tempNum = atoi(temp);
+				m_ptr[tempNum - 1]->linear(true);
+				m_ptr[tempNum - 1]->display(cout);
+			}
+		}
+		else
+		{
+			cout << "The list is emtpy!" << endl;
+		}
+		return rowCounter;
+	}
+	AidMan& AidMan::save()
+	{
+		if (m_file)
+		{
+			ofstream file;
+			file.open(m_file);
+			for (int i = 0; i < m_numIProdItems; i++)
+			{
+				m_ptr[i]->save(file);
+			}
+		}
+		return *this;
+	}
+	AidMan& AidMan::deallocate()
+	{
+		for (int i = 0; i < m_numIProdItems; i++)
+		{
+			delete m_ptr[i];
+		}
+		delete[] m_file;
+		m_file = nullptr;
+		m_numIProdItems = 0;
+		return *this;
+	}
+	bool AidMan::load(const char* tempFileName)
+	{
+		bool isLoaded = false;
+		bool done = false;
+		int loadCounter = 0;
+		save();
+		deallocate();
+		ut.alocpy(m_file, tempFileName);
+		ofstream newFile;
+		ifstream file;
+		file.open(m_file);
+		if (!file.is_open())
+		{
+			cout << "Failed to open " << m_file << " for reading!";
+			cout << "Would you like to create a new data file?";
+			cout << "1- Yes!\n0- Exit\n>";
+			int tempNum = ut.getint();
+			switch (tempNum)
+			{
 			case 1:
-				cout << "\n****List Items****\n" << endl;
+				newFile.open(m_file);
+				done = true;
 				break;
-			case 2:
-				cout << "\n****Add Item****\n" << endl;
-				break;
-			case 3:
-				cout << "\n****Remove Item****\n" << endl;
-				break;
-			case 4:
-				cout << "\n****Update Quantity****\n" << endl;
-				break;
-			case 5:
-				cout << "\n****Sort****\n" << endl;
-				break;
-			case 6:
-				cout << "\n****Ship Items****\n" << endl;
-				break;
-			case 7:
-				cout << "\n****New/Open Aid Database****\n" << endl;
+			case 0:
 				break;
 			default:
 				break;
 			}
-		} while (num != 0);
+		}
+		if (file.is_open() && done != true)
+		{
+			while (!file.eof())
+			{
+				if (file.peek() == 1 || file.peek() == 2 || file.peek() == 3)
+				{
+					m_ptr[m_numIProdItems] = new Perishable;
+					
+					m_ptr[m_numIProdItems]->load(file);
+					if (m_ptr[m_numIProdItems]->operator bool())
+					{
+						m_numIProdItems++;
+						loadCounter++;
+					}
+					else
+					{
+						delete m_ptr[m_numIProdItems];
+					}
+				}
+				if (file.peek() == 4 || file.peek() == 5 || file.peek() == 6 || file.peek() == 7|| file.peek() == 8|| file.peek() == 9)
+				{
+					m_ptr[m_numIProdItems] = new Item;
+					m_ptr[m_numIProdItems]->load(file);
+					if (m_ptr[m_numIProdItems]->operator bool())
+					{
+						m_numIProdItems++;
+						loadCounter++;
+					}
+					else
+					{
+						delete m_ptr[m_numIProdItems];
+					}
+				}
+				if (!isdigit(file.peek()))
+				{
+					file.setstate(ios::failbit);
+				}
+			}
+		}
+		if (m_numIProdItems > 0)
+		{
+			isLoaded = true;
+		}
+		return isLoaded;
 	}
 }

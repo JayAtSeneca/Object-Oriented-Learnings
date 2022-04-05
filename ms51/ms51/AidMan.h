@@ -22,12 +22,15 @@ that my professor provided to complete my workshops and assignments.
 #define SDDS_AIDMAN_H
 #include "Menu.h"
 #include "iProduct.h"
+#include "Perishable.h"
 namespace sdds
 {
 	const int sdds_max_num_items = 100;
 	class AidMan :public Menu
 	{
 		char* m_file{};
+		iProduct* m_ptr[sdds_max_num_items]{};
+		int m_numIProdItems{};
 		unsigned int menu()const;
 
 	public:
@@ -36,6 +39,10 @@ namespace sdds
 		AidMan& operator=(const AidMan& a) = delete;
 		virtual ~AidMan();
 		void run();
+		int list(const char* sub_desc = nullptr);
+		AidMan& save();
+		AidMan& deallocate();
+		bool load(const char* tempFileName);
 	};
 }
 #endif // !SDDS_AIDMAN_H

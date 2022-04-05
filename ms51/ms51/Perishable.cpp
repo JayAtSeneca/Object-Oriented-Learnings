@@ -49,7 +49,7 @@ namespace sdds
 	{
 		bool done = false;
 		int tempMonth = m_expiry.retMonth();
-		if (tempMonth != 4)
+		if (tempMonth != 4 && Item::operator bool())
 		{
 			done = true;
 		}
