@@ -8,14 +8,15 @@ Citation and Sources...
 Final Project Milestone 2
 Module: AidMan
 Filename: AidMan.cpp
-Version 3.0
+Version 4.0
 Author	Jay Pravinkumar Chaudhari
 Revision History
 -----------------------------------------------------------
-Date      Reason
-2022/04/06  completed milestone 5(2)
+Date        Reason
+2022/04/06  completed milestone 5(1)
 			added save,load,deallocate and list function
 			added addItem()
+			added remove()
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
@@ -102,7 +103,8 @@ namespace sdds
 					addItem();
 					break;
 				case 3:
-					cout << "\n****Remove Item****\n" << endl;
+					cout << "\n****Remove Item****" << endl;
+					remove();
 					break;
 				case 4:
 					cout << "\n****Update Quantity****\n" << endl;
@@ -132,6 +134,7 @@ namespace sdds
 	int AidMan::list(const char* sub_desc)
 	{
 		int rowCounter = 0;
+		bool rowInput = true;
 		if (m_numIProdItems > 0) {
 			cout << " ROW |  SKU  | Description                         | Have | Need |  Price  | Expiry" << endl;
 			cout << "-----+-------+-------------------------------------+------+------+---------+-----------" << endl;
@@ -170,21 +173,24 @@ namespace sdds
 						m_ptr[i]->display(cout);
 						cout << endl;
 						rowCounter++;
+						rowInput = false;
 					}
 				}
 			}
 			cout << "-----+-------+-------------------------------------+------+------+---------+-----------" << endl;
-			cin.ignore();
-			cout << "Enter row number to display details or <ENTER> to continue:\n> ";
-						
-			if (cin.peek() != '\n') {
-				char temp[4] = "";
-				cin >> temp;
-				int tempNum = atoi(temp);
-				m_ptr[tempNum - 1]->linear(false);
-				m_ptr[tempNum - 1]->display(cout);
+			
+			if (rowInput) {
+				cout << "Enter row number to display details or <ENTER> to continue:\n> ";
+				cin.ignore();
+				if (cin.peek() != '\n') {
+					char temp[4] = "";
+					cin >> temp;
+					int tempNum = atoi(temp);
+					m_ptr[tempNum - 1]->linear(false);
+					m_ptr[tempNum - 1]->display(cout);
+				}
+				cout << endl;
 			}
-			cout << endl;
 		}
 		else
 		{
@@ -386,6 +392,52 @@ namespace sdds
 				break;
 			default:
 				break;
+			}
+		}
+		return *this;
+	}
+	AidMan& AidMan::remove()
+	{
+		bool done = false;
+		int delIndex = 0;
+		char tempDes[100] = { "\0" };
+		cout << "Item description: ";
+		cin.ignore(1000, '\n');
+		cin.getline(tempDes, 100, '\n');
+		int num = list(tempDes);
+		if (num > 0)
+		{
+			int tempSku = ut.getint("Enter SKU: ");
+			for (int i = 0; i < m_numIProdItems && done != true; i++)
+			{
+				if (m_ptr[i]->operator==(tempSku))
+				{
+					cout << "Following item will be removed:" << endl;
+					m_ptr[i]->linear(false);
+					m_ptr[i]->display(cout) << endl;
+					cout << "Are you sure?\n1- Yes!\n0- Exit\n> ";
+					int tempInt = 0;
+					cin >> tempInt;
+					switch (tempInt)
+					{
+					case 1:
+						delIndex = i;
+						delete m_ptr[i];
+						for (int j = delIndex; j < m_numIProdItems; j++)
+						{
+							m_ptr[j] = m_ptr[j + 1];
+						}
+						m_numIProdItems--;
+						cout << "Item removed!" << endl << endl;
+						done = true;
+						break;
+					case 0:
+						cout << "Aborted!" << endl;
+						break;
+					default:
+						break;
+					}
+				}
 			}
 		}
 		return *this;

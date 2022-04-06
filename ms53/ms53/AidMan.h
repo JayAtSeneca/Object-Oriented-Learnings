@@ -8,13 +8,14 @@ Citation and Sources...
 Final Project Milestone 2
 Module: AidMan
 Filename: AidMan.h
-Version 1.0
+Version 4.0
 Author	Jay Pravinkumar Chaudhari
 Revision History
 -----------------------------------------------------------
-Date      Reason
+Date        Reason
 2022/04/06  completed milestone 5(1)
 			added save,load,deallocate and list function
+			added remove()
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
@@ -46,6 +47,7 @@ namespace sdds
 		bool load(const char* tempFileName);
 		int search(int sku)const;
 		AidMan& addItem();
+		AidMan& remove();
 	};
 }
 #endif // !SDDS_AIDMAN_H
