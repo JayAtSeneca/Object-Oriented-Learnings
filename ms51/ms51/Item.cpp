@@ -13,7 +13,7 @@ Author	Jay Pravinkumar Chaudhari
 Revision History
 -----------------------------------------------------------
 Date      Reason
-2022/03/30  completed milestone 3
+2022/04/06  completed milestone 3
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
@@ -146,6 +146,7 @@ namespace sdds
 		ifstr >> tempQuantityReq;
 		ifstr.ignore();
 		ifstr >> tempPrice;
+		ifstr.ignore();
 		m_sku = tempSKU;
 		ut.alocpy(m_itemDescription, tempDescription);
 		m_quantityInHand = tempQuantityInHand;

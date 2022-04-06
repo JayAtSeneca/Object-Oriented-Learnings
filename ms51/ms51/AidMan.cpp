@@ -8,12 +8,13 @@ Citation and Sources...
 Final Project Milestone 2
 Module: AidMan
 Filename: AidMan.cpp
-Version 1.0
+Version 2.0
 Author	Jay Pravinkumar Chaudhari
 Revision History
 -----------------------------------------------------------
 Date      Reason
-2022/03/16  completed milestone 2
+2022/04/06  completed milestone 5(1)
+			added save,load,deallocate and list function
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
@@ -33,7 +34,7 @@ namespace sdds
 		int month = 0;
 		int day = 0;
 		ut.getSystemDate(&year, &month, &day);
-		cout << "Aid Management System Version 0.1" << endl;
+		cout << "Aid Management System" << endl;
 		cout << "Date: " << year << "/0" << month << "/" << day << endl;
 		cout << "Data file: ";
 		if (m_file != nullptr)
@@ -49,14 +50,15 @@ namespace sdds
 		return num;
 	}
 
-	AidMan::AidMan(unsigned int num, const char* str) :Menu(num, str), m_numIProdItems{ 0 },m_ptr{}
+	AidMan::AidMan(unsigned int num, const char* str) :Menu(num, str)
 	{
 		m_file = nullptr;
 	}
 
 	AidMan::~AidMan()
 	{
-		delete[] m_file;
+		deallocate();
+		/*delete[] m_file;*/
 	}
 
 	void AidMan::run()
@@ -71,13 +73,13 @@ namespace sdds
 				switch (num)
 				{
 				default:
-					cout << "\n****New/Open Aid Database****\n" << endl;
+					cout << "\n****New/Open Aid Database****" << endl;
 					cout << "Enter file name: ";
 					char tempName[30] = { "\0" };
 					cin >> tempName;
 					if (load(tempName))
 					{
-						cout << m_numIProdItems + 1 << " records loaded!" << endl;
+						cout << m_numIProdItems << " records loaded!" << endl << endl;
 					}
 					break;
 				}
@@ -88,9 +90,10 @@ namespace sdds
 				{
 				case 0:
 					cout << "Exiting Program!" << endl;
+					save();
 					break;
 				case 1:
-					cout << "\n****List Items****\n" << endl;
+					cout << "\n****List Items****" << endl;
 					list();
 					break;
 				case 2:
@@ -128,8 +131,8 @@ namespace sdds
 	{
 		int rowCounter = 0;
 		if (m_numIProdItems > 0) {
-			cout << " ROW |  SKU  | Description                         | Have | Need |  Price  | Expiry";
-			cout << "-----+-------+-------------------------------------+------+------+---------+-----------";
+			cout << " ROW |  SKU  | Description                         | Have | Need |  Price  | Expiry" << endl;
+			cout << "-----+-------+-------------------------------------+------+------+---------+-----------" << endl;
 			if (sub_desc == nullptr)
 			{
 
@@ -141,8 +144,10 @@ namespace sdds
 					cout.fill(' ');
 					cout << i + 1;
 					cout.unsetf(ios::right);
+					cout << " | ";
 					m_ptr[i]->linear(true);
 					m_ptr[i]->display(cout);
+					cout << endl;
 					rowCounter++;
 				}
 			}
@@ -160,10 +165,12 @@ namespace sdds
 						cout.unsetf(ios::right);
 						m_ptr[i]->linear(true);
 						m_ptr[i]->display(cout);
+						cout << endl;
 						rowCounter++;
 					}
 				}
 			}
+			cout << "-----+-------+-------------------------------------+------+------+---------+-----------" << endl;
 			cin.ignore();
 			cout << "Enter row number to display details or <ENTER> to continue:\n> ";
 						
@@ -171,9 +178,10 @@ namespace sdds
 				char temp[4] = "";
 				cin >> temp;
 				int tempNum = atoi(temp);
-				m_ptr[tempNum - 1]->linear(true);
+				m_ptr[tempNum - 1]->linear(false);
 				m_ptr[tempNum - 1]->display(cout);
 			}
+			cout << endl;
 		}
 		else
 		{
@@ -189,7 +197,7 @@ namespace sdds
 			file.open(m_file);
 			for (int i = 0; i < m_numIProdItems; i++)
 			{
-				m_ptr[i]->save(file);
+				m_ptr[i]->save(file)<<endl;
 			}
 		}
 		return *this;
@@ -236,9 +244,10 @@ namespace sdds
 		}
 		if (file.is_open() && done != true)
 		{
-			while (!file.eof())
+			while (file)
 			{
-				if (file.peek() == 1 || file.peek() == 2 || file.peek() == 3)
+				char peek = file.peek();
+				if (peek == '1' || peek == '2' || peek == '3')
 				{
 					m_ptr[m_numIProdItems] = new Perishable;
 					
@@ -253,7 +262,7 @@ namespace sdds
 						delete m_ptr[m_numIProdItems];
 					}
 				}
-				if (file.peek() == 4 || file.peek() == 5 || file.peek() == 6 || file.peek() == 7|| file.peek() == 8|| file.peek() == 9)
+				else if (peek == '4' || peek == '5' || peek == '6' || peek == '7' || peek == '8' || peek == '9')
 				{
 					m_ptr[m_numIProdItems] = new Item;
 					m_ptr[m_numIProdItems]->load(file);
@@ -267,7 +276,7 @@ namespace sdds
 						delete m_ptr[m_numIProdItems];
 					}
 				}
-				if (!isdigit(file.peek()))
+				else if (!isdigit(file.peek()))
 				{
 					file.setstate(ios::failbit);
 				}

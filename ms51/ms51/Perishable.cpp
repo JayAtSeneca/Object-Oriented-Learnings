@@ -13,7 +13,7 @@ Author	Jay Pravinkumar Chaudhari
 Revision History
 -----------------------------------------------------------
 Date       Reason
-2022/04/01 To complete milestone 4
+2022/04/06 To complete milestone 4
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
@@ -78,7 +78,6 @@ namespace sdds
 			if (m_instructions)
 				ofstr << m_instructions;
 			ofstr << "\t";
-			/* m_expiry.displayUnformatted(ofstr);*/
 			m_expiry.displayUnformatted(ofstr);
 		}
 		return ofstr;
@@ -87,7 +86,6 @@ namespace sdds
 	{
 		Item::load(ifstr);
 		char tempInstructions[50] = { "\0" };
-		ifstr.ignore();
 		ifstr.getline(tempInstructions, 50, '\t');
 		ifstr >> m_expiry;
 		ifstr.ignore();
