@@ -339,6 +339,7 @@ namespace sdds
 				if(done == false)
 				{
 					tempPerishable->read(cin);
+					cout << endl;
 					if (tempPerishable->operator bool())
 					{
 						m_ptr[m_numIProdItems] = tempPerishable;
@@ -352,7 +353,6 @@ namespace sdds
 				}
 				break;
 			case 2:
-				iProduct* tempItem;
 				tempItem = new Item;
 				cout << "SKU: ";
 				cin >> tempSku;
@@ -360,7 +360,7 @@ namespace sdds
 				{
 					if (m_ptr[i]->operator==(tempSku))
 					{
-						cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n";
+						cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n" << endl;
 						done = true;
 						delete tempItem;
 					}
@@ -368,6 +368,7 @@ namespace sdds
 				if(done == false)
 				{
 					tempItem->read(cin);
+					cout << endl;
 					if (tempItem->operator bool())
 					{
 						m_ptr[m_numIProdItems] = tempItem;
