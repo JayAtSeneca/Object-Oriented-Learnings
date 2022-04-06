@@ -8,13 +8,14 @@ Citation and Sources...
 Final Project Milestone 2
 Module: AidMan
 Filename: AidMan.cpp
-Version 2.0
+Version 3.0
 Author	Jay Pravinkumar Chaudhari
 Revision History
 -----------------------------------------------------------
 Date      Reason
-2022/04/06  completed milestone 5(1)
+2022/04/06  completed milestone 5(2)
 			added save,load,deallocate and list function
+			added addItem()
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
@@ -97,7 +98,8 @@ namespace sdds
 					list();
 					break;
 				case 2:
-					cout << "\n****Add Item****\n" << endl;
+					cout << "\n****Add Item****" << endl;
+					addItem();
 					break;
 				case 3:
 					cout << "\n****Remove Item****\n" << endl;
@@ -118,7 +120,7 @@ namespace sdds
 					cin >> tempName;
 					if (load(tempName))
 					{
-						cout << m_numIProdItems + 1 << " records loaded!" << endl;
+						cout << m_numIProdItems << " records loaded!" << endl;
 					}
 					break;
 				default:
@@ -311,60 +313,70 @@ namespace sdds
 		}
 		else
 		{
-			cout << "1- Perishable\n2 - Non - Perishable\n---------------- -\n0 - Exit\n> ";
+			bool done = false;
+			iProduct* tempPerishable;
+			iProduct* tempItem;
+			int tempSku = 0;
+			cout << "1- Perishable\n2- Non-Perishable\n-----------------\n0- Exit\n> ";
 			int num = 0;
 			cin >> num;
 			switch (num)
 			{
 			case 1:
-				iProduct* tempIProduct;
-				tempIProduct = new Perishable;
-				int tempSku = 0;
+				tempPerishable = new Perishable;
 				cout << "SKU: ";
 				cin >> tempSku;
-				if (tempIProduct->operator==(tempSku))
+				for (int i = 0; i < m_numIProdItems && done != true; i++)
 				{
-					cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n";
-					delete tempIProduct;
-				}
-				else
-				{
-					tempIProduct->read(cin);
-					if (tempIProduct->operator bool())
+					if (m_ptr[i]->operator==(tempSku))
 					{
-						m_ptr[m_numIProdItems] = tempIProduct;
+						cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n";
+						done = true;
+						delete tempPerishable;
+					}
+				}
+				
+				if(done == false)
+				{
+					tempPerishable->read(cin);
+					if (tempPerishable->operator bool())
+					{
+						m_ptr[m_numIProdItems] = tempPerishable;
 						m_numIProdItems++;
 					}
 					else
 					{
-						tempIProduct->display(cout);
-						delete tempIProduct;
+						tempPerishable->display(cout);
+						delete tempPerishable;
 					}
 				}
 				break;
 			case 2:
-				iProduct* tempIProduct;
-				tempIProduct = new Item;
-				int tempSku = 0;
+				iProduct* tempItem;
+				tempItem = new Item;
 				cout << "SKU: ";
 				cin >> tempSku;
-				if (tempIProduct->operator==(tempSku))
+				for (int i = 0; i < m_numIProdItems && done != true; i++)
 				{
-					cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n";
-					delete tempIProduct;
-				}
-				else
-				{
-					tempIProduct->read(cin);
-					if (tempIProduct->operator bool())
+					if (m_ptr[i]->operator==(tempSku))
 					{
-						m_ptr[m_numIProdItems] = tempIProduct;
+						cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n";
+						done = true;
+						delete tempItem;
+					}
+				}
+				if(done == false)
+				{
+					tempItem->read(cin);
+					if (tempItem->operator bool())
+					{
+						m_ptr[m_numIProdItems] = tempItem;
 						m_numIProdItems++;
 					}
 					else
 					{
-						tempIProduct->display(cout);
-						delete tempIProduct;
+						tempItem->display(cout);
+						delete tempItem;
 					}
 				}
 				break;
@@ -375,5 +387,6 @@ namespace sdds
 				break;
 			}
 		}
+		return *this;
 	}
 }
