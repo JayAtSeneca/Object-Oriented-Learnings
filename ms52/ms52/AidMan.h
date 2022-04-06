@@ -44,6 +44,8 @@ namespace sdds
 		AidMan& save();
 		AidMan& deallocate();
 		bool load(const char* tempFileName);
+		int search(int sku)const;
+		AidMan& addItem();
 	};
 }
 #endif // !SDDS_AIDMAN_H

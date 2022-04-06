@@ -163,6 +163,7 @@ namespace sdds
 						cout.fill(' ');
 						cout << i + 1;
 						cout.unsetf(ios::right);
+						cout << " | ";
 						m_ptr[i]->linear(true);
 						m_ptr[i]->display(cout);
 						cout << endl;
@@ -287,5 +288,92 @@ namespace sdds
 			isLoaded = true;
 		}
 		return isLoaded;
+	}
+	int AidMan::search(int sku) const
+	{
+		int retIndex = -1;
+		bool done = false;
+		for (int i = 0; i < m_numIProdItems && done!= true; i++)
+		{
+			if (m_ptr[i]->operator==(sku))
+			{
+				retIndex = i;
+				done = true;
+			}
+		}
+		return retIndex;
+	}
+	AidMan& AidMan::addItem()
+	{
+		if (m_numIProdItems > sdds_max_num_items)
+		{
+			cout << "Database full!" << endl;
+		}
+		else
+		{
+			cout << "1- Perishable\n2 - Non - Perishable\n---------------- -\n0 - Exit\n> ";
+			int num = 0;
+			cin >> num;
+			switch (num)
+			{
+			case 1:
+				iProduct* tempIProduct;
+				tempIProduct = new Perishable;
+				int tempSku = 0;
+				cout << "SKU: ";
+				cin >> tempSku;
+				if (tempIProduct->operator==(tempSku))
+				{
+					cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n";
+					delete tempIProduct;
+				}
+				else
+				{
+					tempIProduct->read(cin);
+					if (tempIProduct->operator bool())
+					{
+						m_ptr[m_numIProdItems] = tempIProduct;
+						m_numIProdItems++;
+					}
+					else
+					{
+						tempIProduct->display(cout);
+						delete tempIProduct;
+					}
+				}
+				break;
+			case 2:
+				iProduct* tempIProduct;
+				tempIProduct = new Item;
+				int tempSku = 0;
+				cout << "SKU: ";
+				cin >> tempSku;
+				if (tempIProduct->operator==(tempSku))
+				{
+					cout << "Sku: " << tempSku << " is already in the system, try updating quantity instead.\n";
+					delete tempIProduct;
+				}
+				else
+				{
+					tempIProduct->read(cin);
+					if (tempIProduct->operator bool())
+					{
+						m_ptr[m_numIProdItems] = tempIProduct;
+						m_numIProdItems++;
+					}
+					else
+					{
+						tempIProduct->display(cout);
+						delete tempIProduct;
+					}
+				}
+				break;
+			case 0:
+				cout << "Aborted\n";
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }
