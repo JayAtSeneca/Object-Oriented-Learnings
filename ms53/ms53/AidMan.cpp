@@ -412,7 +412,7 @@ namespace sdds
 			{
 				if (m_ptr[i]->operator==(tempSku))
 				{
-					cout << "Following item will be removed:" << endl;
+					cout << "Following item will be removed: " << endl;
 					m_ptr[i]->linear(false);
 					m_ptr[i]->display(cout) << endl;
 					cout << "Are you sure?\n1- Yes!\n0- Exit\n> ";
