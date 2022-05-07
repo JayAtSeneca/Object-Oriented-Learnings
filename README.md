@@ -1,5 +1,2 @@
 # OOP244Works
-- Name         : Jay Pravinkumar Chaudhari
-- Student ID   : 147268205
-- Seneca E-mail: jpchaudhari@myseneca.ca
-- OOP244NAA
+All the work done in OOP 244 course
